@@ -1,0 +1,141 @@
+[
+    {
+        "id": "7c520de5e54cd880",
+        "type": "tab",
+        "label": "MQTT",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "f7f3b1f763905503",
+        "type": "mqtt in",
+        "z": "7c520de5e54cd880",
+        "name": "",
+        "topic": "/home/sensorData",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "35431ba07d8b2088",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 150,
+        "y": 100,
+        "wires": [
+            [
+                "e6835916f191e7e0"
+            ]
+        ]
+    },
+    {
+        "id": "e6835916f191e7e0",
+        "type": "json",
+        "z": "7c520de5e54cd880",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 390,
+        "y": 100,
+        "wires": [
+            [
+                "035d356028fde7bc"
+            ]
+        ]
+    },
+    {
+        "id": "035d356028fde7bc",
+        "type": "function",
+        "z": "7c520de5e54cd880",
+        "name": "",
+        "func": "var sensorValues = msg.payload;\nvar atodValues = JSON.parse(sensorValues[\"atod\"]);\nvar temperatureValues = JSON.parse(sensorValues[\"temperatures\"]);\nvar superheat_pressure = sensorValues[\"superheat_pressure\"];\nvar superheat_temperature = sensorValues[\"superheat_temperature\"];\n\nmsg.payload = { \"machine\": sensorValues[\"machine\"],\n                \"atod0\": atodValues[0],\n                \"atod1\": atodValues[1],\n                \"atod2\": atodValues[2],\n                \"atod3\": atodValues[3],\n                \"atod4\": atodValues[4],\n                \"atod5\": atodValues[5],\n                \"atod6\": atodValues[6],\n                \"atod7\": atodValues[7],\n                \"atod8\": atodValues[8],\n                \"atod9\": atodValues[9],\n                \"atod10\": atodValues[10],\n                \"atod11\": atodValues[11],\n                \"atod12\": atodValues[12],\n                \"atod13\": atodValues[13],\n                \"atod14\": atodValues[14],\n                \"atod15\": atodValues[15],\n                \"temperature0\": temperatureValues[0],\n                \"temperature1\": temperatureValues[1],\n                \"temperature2\": temperatureValues[2],\n                \"temperature3\": temperatureValues[3],\n                \"temperature4\": temperatureValues[4],\n                \"temperature5\": temperatureValues[5],\n                \"temperature6\": temperatureValues[6],\n                \"temperature7\": temperatureValues[7],\n                \"temperature8\": temperatureValues[8],\n                \"temperature9\": temperatureValues[9],\n                \"temperature10\": temperatureValues[10],\n                \"temperature11\": temperatureValues[11],\n                \"temperature12\": temperatureValues[12],\n                \"temperature13\": temperatureValues[13],\n                \"temperature14\": temperatureValues[14],\n                \"temperature15\": temperatureValues[15],\n                \"superheat_pressure\" : superheat_pressure,\n                \"superheat_temperature\" : superheat_temperature\n              }\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 600,
+        "y": 200,
+        "wires": [
+            [
+                "d53d2a6d54aa887d",
+                "337b85847151e57c"
+            ]
+        ]
+    },
+    {
+        "id": "d53d2a6d54aa887d",
+        "type": "influxdb out",
+        "z": "7c520de5e54cd880",
+        "influxdb": "ab46b462b8ac0719",
+        "name": "",
+        "measurement": "sensorData",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "ms",
+        "retentionPolicyV18Flux": "",
+        "org": "organisation",
+        "bucket": "bucket",
+        "x": 860,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "337b85847151e57c",
+        "type": "debug",
+        "z": "7c520de5e54cd880",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 790,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "35431ba07d8b2088",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "localhost",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "sessionExpiry": ""
+    },
+    {
+        "id": "ab46b462b8ac0719",
+        "type": "influxdb",
+        "hostname": "127.0.0.1",
+        "port": "8086",
+        "protocol": "http",
+        "database": "",
+        "name": "influx",
+        "usetls": false,
+        "tls": "",
+        "influxdbVersion": "1.x",
+        "url": "http://localhost:8086",
+        "rejectUnauthorized": true
+    }
+]
